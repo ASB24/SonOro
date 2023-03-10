@@ -12,4 +12,6 @@ run pip install --no-cache-dir -r requirements.txt
 run chmod +x SonOro.py
 run chmod +x testModules.py
 
-cmd ["python", "testModules.py"]
+cmd ["python", "SonOro.py"]
+
+ENTRYPOINT [ "/bin/sh", "-c", "if [ \"$1\" = \"test\" ]; then python testModules.py; else python SonOro.py; fi" ]
