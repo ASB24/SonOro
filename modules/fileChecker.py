@@ -29,7 +29,10 @@ def getWavFile(filePath: str, wavFilePath: str) -> str:
     except FileNotFoundError:
         file = open(wavFilePath, "w+").close()
 
+    targetLoudness = 15
+
     audio = AudioSegment.from_file(filePath)
+    audio = audio.normalize(targetLoudness)
     audioExport = audio.export(wavFilePath, format="wav")
     audioExport.close()
 
