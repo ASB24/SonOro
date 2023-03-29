@@ -1,12 +1,13 @@
 import sys
-import os
 sys.path.append('./modules')
+if True:
+    from pydub import AudioSegment
+    import fileChecker as fc
+    import os
 
-import fileChecker as fc
-from pydub import AudioSegment
 
 k = 5
-testFilePath = './disco.00004.au'
+testFilePath = './testfiles/Toxicity.mp3'
 convertedFilePath = "./tempFile.wav"
 testConvertedAudioPath = "./testConvertedAudio.wav"
 
@@ -16,6 +17,6 @@ if not os.path.isfile(convertedFilePath):
     filePath = fc.getWavFile(testFilePath, convertedFilePath)
 
 audio = AudioSegment.from_file(filePath)
-target_loudness = 15
+target_loudness = 10
 normalized_audio = audio.normalize(target_loudness)
 normalized_audio.export(testConvertedAudioPath, format="wav")

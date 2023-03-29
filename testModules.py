@@ -1,9 +1,10 @@
 import sys
-sys.path.append('./tests')
 sys.path.append('./modules')
+sys.path.append('./modules/tests')
 
-import unittest
-from FileCheckerTesting import TestMethods as FileChecker
+if True:  # noqa: E402
+    import unittest
+    from FileCheckerTesting import TestMethods as FileChecker
 
 
 if __name__ == '__main__':
