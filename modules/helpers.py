@@ -3,6 +3,8 @@ import os
 import numpy as np
 from scipy.io import wavfile as wav
 from python_speech_features import mfcc
+import pickle
+
 
 def extractFeature(soundFile, iterations):
     (rate, sig) = wav.read(soundFile)
@@ -10,12 +12,14 @@ def extractFeature(soundFile, iterations):
     covariance = np.cov(np.matrix.transpose(mfccFeat))
     meanMatrix = mfccFeat.mean(0)
     feature = (meanMatrix, covariance, iterations)
+
     return feature
 
-def getGenres(genresPath):
+
+def getGenres(genresFilePath):
     genres = defaultdict(int)
-    i = 1
-    for folder in os.listdir(genresPath):
-        genres[i] = folder
-        i += 1
+
+    with open(genresFilePath, 'rb') as genresFile:
+        genres = pickle.load(genresFile)
+
     return genres
