@@ -32,8 +32,12 @@ def getWavFile(filePath: str, wavFilePath: str) -> str:
     targetLoudness = 15
 
     audio = AudioSegment.from_file(filePath)
+
+    audio = audio.set_channels(1)
+    audio = audio.set_frame_rate(22050)
     audio = audio.normalize(targetLoudness)
-    audioExport = audio.export(wavFilePath, format="wav")
+
+    audioExport = audio.export(wavFilePath, format="wav", bitrate="16")
     audioExport.close()
 
     return wavFilePath
