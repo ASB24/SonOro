@@ -6,13 +6,13 @@ if True:  # noqa: E402
     import modelTrainer as mt
     import knowledgeEntry as ke
     import helpers as h
+    from dotenv import load_dotenv
 
-k = 5
-testFilePath = './TestFile.mp3'
-datasetPath = "assets/dataset.dat"
-convertedFilePath = "assets/tempFile.wav"
-genresPath = "assets/genres"
-genresFilePath = "temp/genres.dat"
+load_dotenv()
+
+datasetPath = os.getenv('DATASET_PATH')
+genresPath = os.getenv('GENRES_PATH')
+genresFilePath = os.getenv('GENRES_FILE_PATH')
 
 print('Creating dataset...')
 ke.createDataset(datasetPath, genresPath, genresFilePath)

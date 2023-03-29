@@ -29,12 +29,6 @@ def distance(referenceFeature, feature, k):
     distance = mahalanobis(
         featureMeanMatrix, referenceMeanMatrix, inv_covariance)
 
-    # distance = np.trace(np.dot(np.linalg.inv(referenceCovariance), featureCovariance))
-    # distance += (np.dot(np.dot((referenceMeanMatrix-featureMeanMatrix).transpose(),
-    #              np.linalg.inv(referenceCovariance)), referenceMeanMatrix-featureMeanMatrix))
-    # distance += np.log(np.linalg.det(referenceCovariance)) - np.log(np.linalg.det(featureCovariance))
-    # distance -= k
-
     return distance
 
 
