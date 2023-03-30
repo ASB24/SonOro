@@ -48,6 +48,9 @@ def predict():
             audioStreamPath = f"{os.getenv('TEMP_FILE_PATH')}/{audioStream.filename}"
             audioStream.save(audioStreamPath)
 
+            with open(os.getenv('TEMP_FILE_PATH') + '/audioName.txt', 'w') as audioNameWriter:
+                audioNameWriter.write(audioStream.filename.split('.')[0])
+
             fc.getWavFile(audioStreamPath, os.getenv('CONVERTED_FILE_PATH'))
 
             os.remove(audioStreamPath)
@@ -72,7 +75,9 @@ def predict():
 def insert():
     if request.method == 'POST':
         try:
-            name = request.form['name']
+            # get file name from temp/audioName.txt
+            with open(os.getenv('TEMP_FILE_PATH') + '/audioName.txt', 'r') as audioNameReader:
+                name = audioNameReader.read()
             genre = request.form['genre']
             audioPath = f"{os.getenv('GENRES_PATH')}/{genre}/{name}.wav"
 
