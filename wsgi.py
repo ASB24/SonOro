@@ -8,6 +8,7 @@ if True:  # noqa: E402
     import knowledgeEntry as ke
     import helpers as h
     from flask import Flask, request, Response
+    from flask_cors import CORS
     from http import HTTPStatus
     import json
     import pydub
@@ -15,6 +16,7 @@ if True:  # noqa: E402
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
 
 if __name__ == "__main__":
     app.run(port=os.getenv(key='PORT', default=5001),
