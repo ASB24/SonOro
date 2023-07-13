@@ -7,10 +7,9 @@ if True:  # noqa: E402
     import modelTrainer as mt
     import knowledgeEntry as ke
     import helpers as h
-    from flask import Flask, request, Response
+    from flask import Flask, request, Response, jsonify
     from flask_cors import CORS
     from http import HTTPStatus
-    import json
     import pydub
 
 load_dotenv()
@@ -30,7 +29,7 @@ class Data:
 
 
 def responseFormat(data, status, message):
-    return Response(json.dumps({'data': data, 'message': message}), status=status, mimetype='application/json')
+    return Response(jsonify({'data': data, 'message': message}), status=status, mimetype='application/json')
 
 
 @app.route("/")
@@ -42,26 +41,34 @@ def hello_world():
 def predict():
     if request.method == 'POST':
         try:
+            print('removing files')
             for file in os.listdir(os.getenv('TEMP_FILE_PATH')):
                 if not file.endswith('.dat'):
                     os.remove(os.path.join(os.getenv('TEMP_FILE_PATH'), file))
 
+            print('saving audio file')
             audioStream = request.files['audio']
             audioStreamPath = f"{os.getenv('TEMP_FILE_PATH')}/{audioStream.filename}"
             audioStream.save(audioStreamPath)
 
+            print('saving audio name')
             with open(os.getenv('TEMP_FILE_PATH') + '/audioName.txt', 'w') as audioNameWriter:
                 audioNameWriter.write(audioStream.filename.split('.')[0])
 
+            print('getting wav file')
             fc.getWavFile(audioStreamPath, os.getenv('CONVERTED_FILE_PATH'))
 
+            print('removing audio file')
             os.remove(audioStreamPath)
+            
+            print('getting prediction')
             prediction = mt.getPrediction(
                 os.getenv('CONVERTED_FILE_PATH'),
                 fc.loadDataset(os.getenv('DATASET_PATH')),
                 int(os.getenv('K')),
                 os.getenv('GENRES_FILE_PATH')
             )
+            print('prediction made')
         except FileNotFoundError:
             return responseFormat(None, HTTPStatus.NOT_FOUND, 'No file found in the temp folder. Please upload a file first.')
         except KeyError:
